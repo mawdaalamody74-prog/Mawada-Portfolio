@@ -12,6 +12,13 @@
            description{ar,en} / role{ar,en} / skills[] /
            status / image / imageMode / url / alt{ar,en}
    imageMode: "cover" (الافتراضي) أو "contain" (للصور المربعة/SVG)
+
+   الصور: اكتب مسار الغلاف في حقل image مثل:
+          image: "assets/images/project-cover.webp"
+   إذا كان الحقل فارغًا (image: "") تُعرض خانة غلاف بلون المظهر
+   الحالي تحمل اسم المشروع الإنجليزي، ولا ينكسر التصميم —
+   وتكفي إضافة المسار لاحقًا لإظهار الصورة مكانها.
+   إذا تعذّر تحميل الصورة (مسار خاطئ) تعود الخانة تلقائيًا.
 --------------------------------------------------------- */
 
 const PROJECTS = [
@@ -79,6 +86,94 @@ const PROJECTS = [
     alt: {
       ar: "غلاف مشروع نقطة — متجر قرطاسية إلكتروني",
       en: "Nuqta project cover — an online stationery store",
+    },
+  },
+  {
+    titleArabic: "استوديو ضوء",
+    titleEnglish: "DOW Studio",
+    type: { ar: "مشروع أكاديمي", en: "Academic Project" },
+    description: {
+      ar: "موقع ويب لاستوديو إبداعي، يركز على تقديم الهوية والخدمات والأعمال بطريقة بصرية منظمة وأنيقة.",
+      en: "A website for a creative studio, focused on presenting identity, services and work in a clear, elegant visual way.",
+    },
+    role: {
+      ar: "التصميم والتطوير",
+      en: "Design & development",
+    },
+    skills: ["HTML", "CSS", "JavaScript", "Responsive Design", "Web Development", "Deployment"],
+    status: { ar: "مكتمل", en: "Completed" },
+    image: "", // ضع مسار الغلاف هنا مثل: "assets/images/dow-studio-cover.webp"
+    imageMode: "cover",
+    url: "https://winter-dust-8f06.thar.workers.dev/",
+    alt: {
+      ar: "غلاف مشروع استوديو ضوء — موقع استوديو إبداعي",
+      en: "DOW Studio project cover — a creative studio website",
+    },
+  },
+  {
+    titleArabic: "ميمو بيوتي",
+    titleEnglish: "Memo Beauty",
+    type: { ar: "مشروع تدريبي / تطبيق عملي", en: "Training Project / Practical App" },
+    description: {
+      ar: "متجر إلكتروني تجريبي لمنتجات الجمال، يركز على تنظيم المنتجات وتجربة المستخدم وتصميم واجهة متجر واضحة وسهلة الاستخدام.",
+      en: "A sample e-commerce store for beauty products, focused on organizing products, user experience and a clear, easy-to-use store interface.",
+    },
+    role: {
+      ar: "التصميم والتطوير",
+      en: "Design & development",
+    },
+    skills: ["HTML", "CSS", "JavaScript", "E-commerce UI", "Responsive Design", "Web Development"],
+    status: { ar: "مكتمل", en: "Completed" },
+    image: "", // ضع مسار الغلاف هنا مثل: "assets/images/memo-beauty-cover.webp"
+    imageMode: "cover",
+    url: "https://mtjr-jml-aarby--mawdaalamody74.replit.app/",
+    alt: {
+      ar: "غلاف مشروع ميمو بيوتي — متجر منتجات جمال",
+      en: "Memo Beauty project cover — a beauty products store",
+    },
+  },
+  {
+    titleArabic: "موقع سيرة ذاتية",
+    titleEnglish: "Personal CV Website",
+    type: { ar: "مشروع أكاديمي / عملي", en: "Academic / Practical Project" },
+    description: {
+      ar: "موقع سيرة ذاتية شخصي تم تصميمه وتطويره لعرض المعلومات المهنية والتعليمية بطريقة منظمة ومتجاوبة.",
+      en: "A personal CV website designed and developed to present professional and education information in an organized, responsive way.",
+    },
+    role: {
+      ar: "التصميم والتطوير",
+      en: "Design & development",
+    },
+    skills: ["HTML", "CSS", "JavaScript", "Responsive Design", "Web Development", "Deployment"],
+    status: { ar: "مكتمل", en: "Completed" },
+    image: "", // ضع مسار الغلاف هنا مثل: "assets/images/personal-cv-cover.webp"
+    imageMode: "cover",
+    url: "https://marya-alamoudi-cv.netlify.app/",
+    alt: {
+      ar: "غلاف مشروع موقع سيرة ذاتية — واجهة سيرة ذاتية متجاوبة",
+      en: "Personal CV Website project cover — a responsive CV interface",
+    },
+  },
+  {
+    titleArabic: "موقعي الشخصي للسيرة الذاتية",
+    titleEnglish: "Mawda CV Website",
+    type: { ar: "مشروع شخصي", en: "Personal Project" },
+    description: {
+      ar: "موقع شخصي يعرض السيرة الذاتية ونبذة والمهارات والتعليم والمشاريع المختارة، بواجهة متجاوبة تدعم العربية والإنجليزية.",
+      en: "A personal website presenting the CV, about, skills, education and selected projects, with a responsive interface supporting Arabic and English.",
+    },
+    role: {
+      ar: "التصميم والتطوير",
+      en: "Design & development",
+    },
+    skills: ["HTML", "CSS", "JavaScript", "Responsive Design", "RTL/LTR", "Deployment"],
+    status: { ar: "مكتمل", en: "Completed" },
+    image: "", // ضع مسار الغلاف هنا مثل: "assets/images/mawda-cv-cover.webp"
+    imageMode: "cover",
+    url: "https://mawada-cv.thar.workers.dev/",
+    alt: {
+      ar: "غلاف موقعي الشخصي للسيرة الذاتية — سيرة ذاتية ومهارات ومشاريع مختارة",
+      en: "My CV website cover — CV, skills and selected projects",
     },
   },
 ];
@@ -193,6 +288,24 @@ let currentLang = store.get(KEY_LANG) === "en" ? "en" : "ar";
    4) بناء بطاقات المشاريع
 --------------------------------------------------------- */
 
+// خانة الغلاف المؤقتة — بنفس أبعاد صورة المشروع (16/10)
+// وبنظام الألوان الحالي، وتختفي تلقائيًا بمجرد إضافة مسار الصورة.
+function projectPlaceholder(project) {
+  const wrap = document.createElement("span");
+  wrap.className = "project__placeholder";
+  wrap.setAttribute("aria-hidden", "true");
+
+  const mark = document.createElement("span");
+  mark.className = "project__placeholder-mark";
+  mark.textContent = project.titleEnglish;
+
+  const line = document.createElement("span");
+  line.className = "project__placeholder-line";
+
+  wrap.append(mark, line);
+  return wrap;
+}
+
 function projectCard(project, lang) {
   const article = document.createElement("article");
   article.className = "project";
@@ -208,12 +321,27 @@ function projectCard(project, lang) {
   media.rel = "noopener noreferrer";
   media.setAttribute("aria-label", `${project.alt[lang]} — ${project.url}`);
 
-  const img = document.createElement("img");
-  img.src = project.image;
-  img.alt = project.alt[lang];
-  img.loading = "lazy";
-  img.decoding = "async";
-  media.appendChild(img);
+  // الخانة البديلة: تُستخدم عند غياب حقل image أو عند فشل تحميل الصورة،
+  // فتبقى بطاقة المشروع بنفس المقاس دون كسر التصميم.
+  const usePlaceholder = () => {
+    if (media.classList.contains("project__media--placeholder")) return;
+    media.classList.add("project__media--placeholder");
+    const img = media.querySelector("img");
+    if (img) img.remove();
+    media.appendChild(projectPlaceholder(project));
+  };
+
+  if (project.image) {
+    const img = document.createElement("img");
+    img.src = project.image;
+    img.alt = project.alt[lang];
+    img.loading = "lazy";
+    img.decoding = "async";
+    img.addEventListener("error", usePlaceholder, { once: true });
+    media.appendChild(img);
+  } else {
+    usePlaceholder();
+  }
 
   const body = document.createElement("div");
   body.className = "project__body";
