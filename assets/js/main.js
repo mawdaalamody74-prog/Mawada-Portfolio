@@ -102,7 +102,7 @@ const PROJECTS = [
     },
     skills: ["HTML", "CSS", "JavaScript", "Responsive Design", "Web Development", "Deployment"],
     status: { ar: "مكتمل", en: "Completed" },
-    image: "", // ضع مسار الغلاف هنا مثل: "assets/images/dow-studio-cover.webp"
+    image: "assets/images/dow-studio-cover.webp",
     imageMode: "cover",
     url: "https://winter-dust-8f06.thar.workers.dev/",
     alt: {
@@ -124,7 +124,7 @@ const PROJECTS = [
     },
     skills: ["HTML", "CSS", "JavaScript", "E-commerce UI", "Responsive Design", "Web Development"],
     status: { ar: "مكتمل", en: "Completed" },
-    image: "", // ضع مسار الغلاف هنا مثل: "assets/images/memo-beauty-cover.webp"
+    image: "assets/images/memo-beauty-cover.webp",
     imageMode: "cover",
     url: "https://mtjr-jml-aarby--mawdaalamody74.replit.app/",
     alt: {
@@ -146,7 +146,7 @@ const PROJECTS = [
     },
     skills: ["HTML", "CSS", "JavaScript", "Responsive Design", "Web Development", "Deployment"],
     status: { ar: "مكتمل", en: "Completed" },
-    image: "", // ضع مسار الغلاف هنا مثل: "assets/images/personal-cv-cover.webp"
+    image: "assets/images/marya-cv-cover.webp",
     imageMode: "cover",
     url: "https://marya-alamoudi-cv.netlify.app/",
     alt: {
@@ -168,7 +168,7 @@ const PROJECTS = [
     },
     skills: ["HTML", "CSS", "JavaScript", "Responsive Design", "RTL/LTR", "Deployment"],
     status: { ar: "مكتمل", en: "Completed" },
-    image: "", // ضع مسار الغلاف هنا مثل: "assets/images/mawda-cv-cover.webp"
+    image: "assets/images/mawada-cv-cover.webp",
     imageMode: "cover",
     url: "https://mawada-cv.thar.workers.dev/",
     alt: {
