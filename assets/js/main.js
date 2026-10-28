@@ -11,10 +11,18 @@
    الحقول: titleArabic / titleEnglish / type{ar,en} /
            description{ar,en} / role{ar,en} / skills[] /
            status / image / imageMode / url / alt{ar,en} /
-           repoUrl (اختياري) / cta{ar,en} (اختياري)
+           pinned / repoUrl (اختياري) / cta{ar,en} (اختياري)
    imageMode: "cover" (الافتراضي) أو "contain" (للصور المربعة/SVG)
    repoUrl: إن وُجد يُضاف زر ثانوي «عرض مستودع GitHub» بجانب
             زر الزيارة الأساسي. cta يسمح بنص مخصّص لزر الزيارة.
+
+   ترتيب المعرض (مهم):
+   -------------------
+   الموقع يعرض المشاريع حسب ترتيب المصفوفة، لكن أي كائن يحمل
+   pinned: true يُعرض دائمًا في المركز الأول قبل كل المشاريع،
+   بغضّ النظر عن موقعه داخل المصفوفة أو عن ترتيب إضافة المشاريع
+   الجديدة لاحقًا. «موقعي الشخصي للسيرة الذاتية» مثبّت هكذا،
+   ولا يزيحه أي مشروع جديد. لا تنقل خاصية pinned إلى مشروع آخر.
 
    الصور: اكتب مسار الغلاف في حقل image مثل:
           image: "assets/images/project-cover.webp"
@@ -182,8 +190,10 @@ const PROJECTS = [
     },
   },
   {
+    // مشروع السيرة الذاتية — مثبّت في المركز الأول دائمًا (انظر قاعدة pinned بالأعلى)
     titleArabic: "موقعي الشخصي للسيرة الذاتية",
     titleEnglish: "Mawda CV Website",
+    pinned: true,
     type: { ar: "مشروع شخصي", en: "Personal Project" },
     description: {
       ar: "موقع شخصي يعرض السيرة الذاتية ونبذة والمهارات والتعليم والمشاريع المختارة، بواجهة متجاوبة تدعم العربية والإنجليزية.",
@@ -437,10 +447,20 @@ function projectCard(project, lang) {
   return article;
 }
 
+// ترتيب المعرض: المشاريع المثبّتة (pinned: true) أولًا دائمًا، ثم
+// باقي المشاريع بالترتيب الأصلي في المصفوفة. Array.filter يحافظ على
+// ترتيب العناصر داخل كل مجموعة، فيبقى ظهور بقية المشاريع كما هو،
+// ولا يستطيع أي مشروع جديد إزاحة السيرة الذاتية من المركز الأول.
+function orderedProjects() {
+  const pinnedProjects = PROJECTS.filter((project) => project.pinned === true);
+  const regularProjects = PROJECTS.filter((project) => project.pinned !== true);
+  return [...pinnedProjects, ...regularProjects];
+}
+
 function renderProjects() {
   const host = $("#projects");
   if (!host) return;
-  host.replaceChildren(...PROJECTS.map((project) => projectCard(project, currentLang)));
+  host.replaceChildren(...orderedProjects().map((project) => projectCard(project, currentLang)));
 }
 
 /* ---------------------------------------------------------
