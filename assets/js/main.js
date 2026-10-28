@@ -1,6 +1,6 @@
 /* =========================================================
    مودة العمودي — Mawda Alamody
-   main.js : المشاريع + الترجمة + الوضع الداكن + التنقل
+   main.js : المشاريع + الترجمة + الوضع الداكن + التنقل + شاركني رأيك
    ========================================================= */
 
 /* ---------------------------------------------------------
@@ -230,6 +230,7 @@ const I18N = {
     navHome: "الرئيسية",
     navWork: "أعمالي",
     navContact: "تواصل",
+    navFeedback: "شارك رأيك",
     heroOverline: "معرض أعمال",
     heroTitleA: "أصنع تجارب رقمية تجمع بين",
     heroTitleB: "الذكاء الاصطناعي، البيانات، وتصميم الويب.",
@@ -245,6 +246,17 @@ const I18N = {
     contactWhatsapp: "واتساب",
     contactEmail: "البريد الإلكتروني",
     contactLinkedin: "لينكدإن",
+    feedbackOverline: "Feedback",
+    feedbackTitle: "شاركني رأيك",
+    feedbackLead: "رأيك أو اقتراحك يساعدني على التحسين.",
+    feedbackLabel: "رأيك أو اقتراحك",
+    feedbackPlaceholder: "اكتب رأيك أو اقتراحك هنا...",
+    feedbackHint: "الرسائل تصل إليّ مباشرة ولا تُعرض للزوار إلا بعد مراجعتي.",
+    feedbackSubmit: "إرسال الرأي",
+    feedbackSending: "جارٍ الإرسال…",
+    feedbackSuccess: "تم إرسال رأيك، شكرًا لك — وصلني فعلًا.",
+    feedbackError: "تعذّر إرسال الرأي الآن، حاول مرة أخرى لاحقًا.",
+    feedbackShort: "اكتب رأيك أولًا (3 أحرف على الأقل).",
     footerName: "مودة العمودي",
     footerNote: "معرض أعمال شخصي",
     uiRole: "دوري في المشروع",
@@ -266,6 +278,7 @@ const I18N = {
     navHome: "Home",
     navWork: "Work",
     navContact: "Contact",
+    navFeedback: "Feedback",
     heroOverline: "Portfolio",
     heroTitleA: "I craft digital experiences that bring together",
     heroTitleB: "AI, data, and web design.",
@@ -281,6 +294,17 @@ const I18N = {
     contactWhatsapp: "WhatsApp",
     contactEmail: "Email",
     contactLinkedin: "LinkedIn",
+    feedbackOverline: "Feedback",
+    feedbackTitle: "Share your thoughts",
+    feedbackLead: "Your feedback or suggestion helps me improve.",
+    feedbackLabel: "Your feedback or suggestion",
+    feedbackPlaceholder: "Write your feedback or suggestion here...",
+    feedbackHint: "Messages come straight to me and are not shown to visitors until I review them.",
+    feedbackSubmit: "Send feedback",
+    feedbackSending: "Sending…",
+    feedbackSuccess: "Your feedback was sent — thank you, it reached me.",
+    feedbackError: "Could not send your feedback right now. Please try again later.",
+    feedbackShort: "Please write your feedback first (at least 3 characters).",
     footerName: "Mawda Alamody",
     footerNote: "Personal portfolio",
     uiRole: "My role",
@@ -481,6 +505,11 @@ function applyLanguage(lang) {
     if (t[key]) el.textContent = t[key];
   });
 
+  $$("[data-i18n-placeholder]").forEach((el) => {
+    const key = el.getAttribute("data-i18n-placeholder");
+    if (t[key]) el.setAttribute("placeholder", t[key]);
+  });
+
   $$("[data-i18n-aria]").forEach((el) => {
     const key = el.getAttribute("data-i18n-aria");
     if (t[key]) el.setAttribute("aria-label", t[key]);
@@ -540,7 +569,111 @@ function toggleTheme() {
 }
 
 /* ---------------------------------------------------------
-   7) القائمة على الجوال + الهيدر + ظهور العناصر
+   7) نموذج «شاركني رأيك» — الإرسال والحفظ في الخادم
+   ---------------------------------------------------------
+   الرسائل لا تُحفظ في المتصفح (localStorage) ولا تُعرض للزوار،
+   بل تُرسل فعليًا إلى خادم Cloudflare Worker المعرّف في
+   api/worker.js وتُخزَّن في قاعدة بيانات (Workers KV) بحالة
+   "pending" — أي خاصة بك وحدك حتى تراجعها من جهة الإدارة.
+
+   لعرض تعليق عامة مستقبلاً: اعتمد الحالة إلى "approved" من لوحة
+   الإدارة، ثم تُجلب الصفحة الرسائل المعتمدة فقط عبر
+   GET /api/feedback — بنية التعليقات والحالات جاهزة من الآن.
+
+   استبدل الرابط التالي بعنوان الـ Worker الذي نشرته إن اختلف.
+--------------------------------------------------------- */
+
+const FEEDBACK_API = "https://mawada-portfolio-api.thar.workers.dev/api/feedback";
+
+const feedbackState = { sending: false };
+
+// تبديل رسائل الحالة (نجاح / خطأ / نص قصير) — النصوص نفسها ثابتة
+// في HTML وتتحدث تلقائيًا مع تبديل اللغة عبر data-i18n.
+function showFeedbackMessage(activeSelector) {
+  ["#feedbackSuccess", "#feedbackError", "#feedbackShort"].forEach((selector) => {
+    const el = $(selector);
+    if (el) el.hidden = selector !== activeSelector;
+  });
+}
+
+function setFeedbackSubmitLabel(text) {
+  const btn = $("#feedbackSubmit");
+  if (btn) btn.textContent = text;
+}
+
+function initFeedbackForm() {
+  const form = $("#feedbackForm");
+  if (!form) return;
+
+  const textarea = $("#feedbackMessage");
+  const honeypot = $("#feedbackWebsite");
+
+  form.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    if (feedbackState.sending) return;
+
+    showFeedbackMessage(null);
+
+    const message = ((textarea && textarea.value) || "").trim();
+    if (message.length < 3) {
+      showFeedbackMessage("#feedbackShort");
+      if (textarea) textarea.focus();
+      return;
+    }
+
+    // المصيدة: لا يملأها زائر حقيقي — نُرجع نجاحًا وهميًا دون حفظ.
+    if (honeypot && honeypot.value) {
+      showFeedbackMessage("#feedbackSuccess");
+      form.reset();
+      return;
+    }
+
+    if (!FEEDBACK_API) {
+      showFeedbackMessage("#feedbackError");
+      return;
+    }
+
+    feedbackState.sending = true;
+    const btn = $("#feedbackSubmit");
+    if (btn) {
+      btn.disabled = true;
+      btn.setAttribute("aria-busy", "true");
+    }
+    setFeedbackSubmitLabel(I18N[currentLang].feedbackSending);
+
+    try {
+      const response = await fetch(FEEDBACK_API, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          message,
+          lang: currentLang,
+          page: location.pathname,
+        }),
+      });
+
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+
+      if (textarea) textarea.value = "";
+      showFeedbackMessage("#feedbackSuccess");
+    } catch (error) {
+      showFeedbackMessage("#feedbackError");
+    } finally {
+      feedbackState.sending = false;
+      if (btn) {
+        btn.disabled = false;
+        btn.removeAttribute("aria-busy");
+      }
+      setFeedbackSubmitLabel(I18N[currentLang].feedbackSubmit);
+    }
+  });
+}
+
+/* ---------------------------------------------------------
+   8) القائمة على الجوال + الهيدر + ظهور العناصر
 --------------------------------------------------------- */
 
 function initMenu() {
@@ -572,7 +705,7 @@ function initHeaderScroll() {
 }
 
 /* ---------------------------------------------------------
-   8) الإقلاع
+   9) الإقلاع
 --------------------------------------------------------- */
 
 function init() {
@@ -590,6 +723,7 @@ function init() {
 
   initMenu();
   initHeaderScroll();
+  initFeedbackForm();
 }
 
 if (document.readyState === "loading") {

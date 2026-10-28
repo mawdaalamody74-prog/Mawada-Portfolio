@@ -50,6 +50,7 @@
           <li><a class="nav__link" href="#home" data-i18n="navHome">الرئيسية</a></li>
           <li><a class="nav__link" href="#work" data-i18n="navWork">أعمالي</a></li>
           <li><a class="nav__link" href="#contact" data-i18n="navContact">تواصل</a></li>
+          <li><a class="nav__link" href="#feedback" data-i18n="navFeedback">شارك رأيك</a></li>
         </ul>
       </nav>
 
@@ -183,6 +184,53 @@
             </a>
           </li>
         </ul>
+
+      </div>
+    </section>
+
+    <!-- ===================== FEEDBACK — شاركني رأيك ===================== -->
+    <section class="section feedback" id="feedback" aria-labelledby="feedback-title">
+      <div class="container">
+
+        <header class="section__head section__head--center">
+          <p class="overline overline--center">
+            <span data-i18n="feedbackOverline">Feedback</span>
+            <span class="overline__line" aria-hidden="true"></span>
+          </p>
+          <h2 class="section__title" id="feedback-title" data-i18n="feedbackTitle">شاركني رأيك</h2>
+          <p class="section__lead" data-i18n="feedbackLead">رأيك أو اقتراحك يساعدني على التحسين.</p>
+        </header>
+
+        <div class="feedback__panel">
+          <form class="feedback__form" id="feedbackForm" novalidate>
+
+            <div class="feedback__field">
+              <label class="feedback__label" for="feedbackMessage" data-i18n="feedbackLabel">رأيك أو اقتراحك</label>
+              <textarea
+                class="feedback__textarea"
+                id="feedbackMessage"
+                name="message"
+                rows="5"
+                required
+                data-i18n-placeholder="feedbackPlaceholder"
+                placeholder="اكتب رأيك أو اقتراحك هنا..."
+              ></textarea>
+              <p class="feedback__hint" data-i18n="feedbackHint">الرسائل تصل إليّ مباشرة ولا تُعرض للزوار إلا بعد مراجعتي.</p>
+            </div>
+
+            <!-- حقل مصيدة للروبوتات: مخفي بصريًا ومنطويًا عن قارئ الشاشة، ولا يُملأ من الزائر -->
+            <input class="feedback__hp" type="text" id="feedbackWebsite" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
+
+            <div class="feedback__actions">
+              <button class="btn btn--primary feedback__submit" type="submit" id="feedbackSubmit" data-i18n="feedbackSubmit">إرسال الرأي</button>
+            </div>
+
+            <p class="feedback__msg feedback__msg--success" id="feedbackSuccess" role="status" aria-live="polite" hidden data-i18n="feedbackSuccess">تم إرسال رأيك، شكرًا لك — وصلني فعلًا.</p>
+            <p class="feedback__msg feedback__msg--error" id="feedbackError" role="alert" hidden data-i18n="feedbackError">تعذّر إرسال الرأي الآن، حاول مرة أخرى لاحقًا.</p>
+            <p class="feedback__msg feedback__msg--error" id="feedbackShort" role="alert" hidden data-i18n="feedbackShort">اكتب رأيك أولًا (3 أحرف على الأقل).</p>
+
+          </form>
+        </div>
 
       </div>
     </section>
