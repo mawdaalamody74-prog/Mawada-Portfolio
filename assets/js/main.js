@@ -10,8 +10,11 @@
    وضع صورته داخل assets/images/ — لا حاجة لتعديل أي كود آخر.
    الحقول: titleArabic / titleEnglish / type{ar,en} /
            description{ar,en} / role{ar,en} / skills[] /
-           status / image / imageMode / url / alt{ar,en}
+           status / image / imageMode / url / alt{ar,en} /
+           repoUrl (اختياري) / cta{ar,en} (اختياري)
    imageMode: "cover" (الافتراضي) أو "contain" (للصور المربعة/SVG)
+   repoUrl: إن وُجد يُضاف زر ثانوي «عرض مستودع GitHub» بجانب
+            زر الزيارة الأساسي. cta يسمح بنص مخصّص لزر الزيارة.
 
    الصور: اكتب مسار الغلاف في حقل image مثل:
           image: "assets/images/project-cover.webp"
@@ -155,6 +158,30 @@ const PROJECTS = [
     },
   },
   {
+    titleArabic: "موقع عرض البوربوينت",
+    titleEnglish: "Presentation Website",
+    type: { ar: "مشروع شخصي / تطبيق عملي", en: "Personal / Practical Project" },
+    description: {
+      ar: "موقع عرض تقديمي تفاعلي عبر الويب، يعرض الشرائح بتنقّل سلس بينها ويدعم لوحة المفاتيح والإيماءات اللمسية وروابط مباشرة لكل شريحة.",
+      en: "An interactive web presentation site, showing slides with smooth navigation, keyboard and touch-gesture support, and a direct link for each slide.",
+    },
+    role: {
+      ar: "التصميم والتطوير",
+      en: "Design & development",
+    },
+    skills: ["HTML5", "CSS3", "JavaScript", "Responsive Design", "RTL/LTR", "Accessibility (ARIA)", "Keyboard & Touch Navigation", "Slide Navigation"],
+    status: { ar: "مكتمل", en: "Completed" },
+    image: "assets/images/mawda-presentation-cover.jpg",
+    imageMode: "cover",
+    url: "https://mawda-presentation.thar.workers.dev/#slide-1",
+    repoUrl: "https://github.com/mawdaalamody74-prog/mawda-presentation",
+    cta: { ar: "زيارة الموقع ↗", en: "Visit website ↗" },
+    alt: {
+      ar: "غلاف موقع عرض البوربوينت — عرض تقديمي تفاعلي عبر الويب",
+      en: "Presentation website cover — an interactive web presentation",
+    },
+  },
+  {
     titleArabic: "موقعي الشخصي للسيرة الذاتية",
     titleEnglish: "Mawda CV Website",
     type: { ar: "مشروع شخصي", en: "Personal Project" },
@@ -212,6 +239,7 @@ const I18N = {
     footerNote: "معرض أعمال شخصي",
     uiRole: "دوري في المشروع",
     uiVisit: "زيارة المشروع ↗",
+    uiRepo: "عرض مستودع GitHub ↗",
     themeLightLabel: "تفعيل الوضع الداكن",
     themeDarkLabel: "تفعيل الوضع الفاتح",
     langLabel: "Switch to English",
@@ -247,6 +275,7 @@ const I18N = {
     footerNote: "Personal portfolio",
     uiRole: "My role",
     uiVisit: "Visit project ↗",
+    uiRepo: "View GitHub repo ↗",
     themeLightLabel: "Switch to dark mode",
     themeDarkLabel: "Switch to light mode",
     langLabel: "التبديل إلى العربية",
@@ -384,9 +413,25 @@ function projectCard(project, lang) {
   cta.href = project.url;
   cta.target = "_blank";
   cta.rel = "noopener noreferrer";
-  cta.textContent = I18N[lang].uiVisit;
+  cta.textContent = (project.cta && project.cta[lang]) || I18N[lang].uiVisit;
 
-  body.append(meta, heading, desc, role, tags, cta);
+  // بعض المشاريع يصاحبها مستودع GitHub — يُضاف زر ثانوي (ghost)
+  // بجانب زر الزيارة الأساسي دون تغيير بطاقات المشاريع بلا repoUrl.
+  const actions = document.createElement("div");
+  actions.className = "project__actions";
+  actions.appendChild(cta);
+
+  if (project.repoUrl) {
+    const repo = document.createElement("a");
+    repo.className = "btn btn--ghost project__cta";
+    repo.href = project.repoUrl;
+    repo.target = "_blank";
+    repo.rel = "noopener noreferrer";
+    repo.textContent = I18N[lang].uiRepo;
+    actions.appendChild(repo);
+  }
+
+  body.append(meta, heading, desc, role, tags, actions);
   article.append(media, body);
 
   return article;
